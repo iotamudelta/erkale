@@ -78,12 +78,16 @@ arma::cx_mat momentum_transfer_series::get(const arma::vec & q, double rmstol, d
     // Add in to total matrix
     if(l%2==0) // Real part
       for(size_t i=0;i<Nbf;i++)
-	for(size_t j=0;j<Nbf;j++)
-	  ret(i,j).real()+=diff(i,j);
+	for(size_t j=0;j<Nbf;j++){
+          std::complex<double> curr(ret(i,j));
+	  ret(i,j) = std::complex<double>(curr.real()+diff(i,j),curr.imag());
+        }
     else // Imaginary part
       for(size_t i=0;i<Nbf;i++)
-	for(size_t j=0;j<Nbf;j++)
-	  ret(i,j).imag()+=diff(i,j);
+	for(size_t j=0;j<Nbf;j++){
+          std::complex<double> curr(ret(i,j));
+	  ret(i,j) = std::complex<double>(curr.real(),curr.imag()+diff(i,j));
+        }
 
     // Break now?
     if(l>=2)

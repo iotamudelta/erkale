@@ -192,8 +192,11 @@ expansion_t expand_orbitals(const arma::mat & C, const BasisSet & bas, const coo
   // Compute values of spherical harmonics and complex conjugate them
   std::vector< std::vector< std::complex<double> > > Ylm_conj=compute_spherical_harmonics(grid,lmax);
   for(size_t i=0;i<Ylm_conj.size();i++) {
-    for(size_t lm=0;lm<Ylm_conj[i].size();lm++)
-      Ylm_conj[i][lm].imag()*=-1.0;
+    for(size_t lm=0;lm<Ylm_conj[i].size();lm++){
+      std::complex<double> curr(Ylm_conj[i][lm]);
+      Ylm_conj[i][lm] = std::complex<double>(curr.real(),curr.imag()*-1.0);
+      //Ylm_conj[i][lm].imag()*=-1.0;
+    }
   }
 
   if(verbose) {
